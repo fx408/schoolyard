@@ -1,12 +1,12 @@
 <?php
 
 /**
- * This is the model class for table "school.school_zone".
+ * This is the model class for table "school_zone".
  *
- * The followings are the available columns in table 'school.school_zone':
+ * The followings are the available columns in table 'school_zone':
  * @property integer $id
  * @property integer $school_id
- * @property integer $name
+ * @property string $name
  * @property string $desc
  * @property integer $type
  * @property string $address
@@ -35,7 +35,7 @@ class SchoolZone extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school_zone';
+		return 'school_zone';
 	}
 
 	/**
@@ -49,9 +49,9 @@ class SchoolZone extends CActiveRecord
 			array('school_id, name, type, address, create_time', 'required'),
 			array('school_id, type, provinces, city, county, status, create_user, create_time', 'numerical', 'integerOnly'=>true),
 			array('latitude, longitude', 'numerical'),
+			array('name', 'length', 'max'=>30),
 			array('desc', 'length', 'max'=>500),
 			array('address', 'length', 'max'=>200),
-			array('name', 'length', 'max'=>30),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, school_id, name, desc, type, address, latitude, longitude, provinces, city, county, status, create_user, create_time', 'safe', 'on'=>'search'),
@@ -105,7 +105,7 @@ class SchoolZone extends CActiveRecord
 
 		$criteria->compare('id',$this->id);
 		$criteria->compare('school_id',$this->school_id);
-		$criteria->compare('name',$this->name);
+		$criteria->compare('name',$this->name,true);
 		$criteria->compare('desc',$this->desc,true);
 		$criteria->compare('type',$this->type);
 		$criteria->compare('address',$this->address,true);
@@ -123,9 +123,9 @@ class SchoolZone extends CActiveRecord
 		));
 	}
 	
-	//
 	public function getZoneList($school_id = 0) {
 		if(!$school_id) $school_id = Yii::app()->session->get('school_id');
+		if(!$school_id) return array();
 		
 		$criteria=new CDbCriteria;
 		$criteria->compare('school_id',$this->school_id);
@@ -137,5 +137,14 @@ class SchoolZone extends CActiveRecord
 		}
 		
 		return $list;
+	}
+	
+	public function listBySchoolId($school_id) {
+		$criteria=new CDbCriteria;
+		$criteria->compare('school_id', $school_id);
+		
+		$data = $this->findAll($criteria);
+		
+		return DataHelper::eachData($data, 'id');
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "school.school_note".
+ * This is the model class for table "school_note".
  *
- * The followings are the available columns in table 'school.school_note':
+ * The followings are the available columns in table 'school_note':
  * @property integer $id
  * @property integer $school_id
  * @property string $title
@@ -29,7 +29,7 @@ class SchoolNote extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school_note';
+		return 'school_note';
 	}
 
 	/**
@@ -42,10 +42,10 @@ class SchoolNote extends CActiveRecord
 		return array(
 			array('school_id, title, content, occurrence_time, create_time', 'required', 'message'=>'{attributes}'),
 			array('school_id, create_user, create_time, status', 'numerical', 'integerOnly'=>true),
-			array('title', 'length', 'max'=>20, 'tooLong'=>'ÊÂ¼þ±êÌâ²»³¬¹ý20¸ö×Ö·û'),
-			array('content', 'length', 'max'=>200, 'tooLong'=>'ÊÂ¼þ±êÌâ²»³¬¹ý200¸ö×Ö·û'),
-			array('occurrence_time', 'match', 'pattern'=>'/^\d{4}-\d{2}-\d{2}$/', 'message'=>'ÊÂ¼þ·¢ÉúÈÕÆÚ¸ñÊ½´íÎó!'),
-			//array('occurrence_time', 'length', 'max'=>12),
+			array('title', 'length', 'max'=>20, 'tooLong'=>'äº‹ä»¶æ ‡é¢˜ä¸è¶…è¿‡20ä¸ªå­—ç¬¦'),
+			array('content', 'length', 'max'=>200, 'tooLong'=>'äº‹ä»¶æ ‡é¢˜ä¸è¶…è¿‡200ä¸ªå­—ç¬¦'),
+			array('occurrence_time', 'match', 'pattern'=>'/^\d{4}-\d{2}-\d{2}$/', 'message'=>'äº‹ä»¶å‘ç”Ÿæ—¥æœŸæ ¼å¼é”™è¯¯!'),
+		//	array('occurrence_time', 'length', 'max'=>12),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, school_id, title, content, occurrence_time, create_user, create_time, status', 'safe', 'on'=>'search'),
@@ -71,9 +71,9 @@ class SchoolNote extends CActiveRecord
 		return array(
 			'id' => 'ID',
 			'school_id' => 'School',
-			'title' => 'ÇëÌîÐ´ÊÂ¼þ±êÌâ',
-			'content' => 'ÇëÌîÐ´ÊÂ¼þÀàÈÝ',
-			'occurrence_time' => 'ÇëÑ¡ÔñÊÂ¼þ·¢ÉúÊ±¼ä',
+			'title' => 'è¯·å¡«å†™äº‹ä»¶æ ‡é¢˜',
+			'content' => 'è¯·å¡«å†™äº‹ä»¶ç±»å®¹',
+			'occurrence_time' => 'è¯·é€‰æ‹©äº‹ä»¶å‘ç”Ÿæ—¶é—´',
 			'create_user' => 'Create User',
 			'create_time' => 'Create Time',
 			'status' => 'Status',
@@ -103,5 +103,14 @@ class SchoolNote extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	public function listBySchoolId($school_id) {
+		$criteria=new CDbCriteria;
+		$criteria->compare('school_id', $school_id);
+		
+		$data = $this->findAll($criteria);
+		
+		return DataHelper::eachData($data, 'id');
 	}
 }

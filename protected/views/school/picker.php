@@ -1,7 +1,7 @@
 <div id="google_map" style="height:100%; width:100%"></div>
 
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDeTbbaUbaoslV0OY-Jyoex6kfMBXRRIZk&sensor=false"></script>
-<script type="text/javascript" src="/static/js/school/map.js"></script>
+<script type="text/javascript" src="/static/js/map.js"></script>
 <script type="text/javascript">
 	$(function() {
 		var map = new larkMap();

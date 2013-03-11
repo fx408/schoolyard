@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "school.school".
+ * This is the model class for table "school".
  *
- * The followings are the available columns in table 'school.school':
+ * The followings are the available columns in table 'school':
  * @property integer $id
  * @property string $name
  * @property string $desc
@@ -28,7 +28,7 @@ class School extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school';
+		return 'school';
 	}
 
 	/**
@@ -41,8 +41,8 @@ class School extends CActiveRecord
 		return array(
 			array('name, type, create_time', 'required', 'message'=>'{attribute}'),
 			array('type, status, create_user, create_time', 'numerical', 'integerOnly'=>true),
-			array('name', 'length', 'max'=>30, 'tooLong'=>'Ñ§Ğ£Ãû³Æ²»³¬¹ı30¸ö×Ö·û!'),
-			array('desc', 'length', 'max'=>500, 'tooLong'=>'Ñ§Ğ£ÃèÊö²»³¬¹ı500¸ö×Ö·û!'),
+			array('name', 'length', 'max'=>30, 'tooLong'=>'å­¦æ ¡åç§°ä¸è¶…è¿‡30ä¸ªå­—ç¬¦!'),
+			array('desc', 'length', 'max'=>500, 'tooLong'=>'å­¦æ ¡æè¿°ä¸è¶…è¿‡500ä¸ªå­—ç¬¦!'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
 			array('id, name, desc, type, status, create_user, create_time', 'safe', 'on'=>'search'),
@@ -67,9 +67,9 @@ class School extends CActiveRecord
 	{
 		return array(
 			'id' => 'ID',
-			'name' => 'ÇëÌîĞ´Ñ§Ğ£Ãû³Æ!',
+			'name' => 'è¯·å¡«å†™å­¦æ ¡åç§°!',
 			'desc' => 'Desc',
-			'type' => 'ÇëÑ¡ÔñÑ§Ğ£ÀàĞÍ!',
+			'type' => 'è¯·é€‰æ‹©å­¦æ ¡ç±»å‹!',
 			'status' => 'Status',
 			'create_user' => 'Create User',
 			'create_time' => 'Create Time',
@@ -98,5 +98,29 @@ class School extends CActiveRecord
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	public function getListByUserId($user_id = 0) {
+		$criteria=new CDbCriteria;
+		$criteria->compare('create_user', $user_id);
+		
+		$data = $this->findAll($criteria);
+		return DataHelper::eachData($data, 'id');
+	}
+	
+	public function getDetailBySchoolId($school_id) {
+		$data = array();
+		$school = $this->findByPk($school_id);
+		
+		if(empty($school)) return false;
+		
+		$data['school'] = $school->attributes;
+		
+		$data['zones'] = SchoolZone::model()->listBySchoolId($school->id);
+		$data['links'] = SchoolLink::model()->listBySchoolId($school->id);
+		$data['notes'] = SchoolNote::model()->listBySchoolId($school->id);
+		$data['pics'] = SchoolPic::model()->listBySchoolId($school->id);
+		
+		return $data;
 	}
 }

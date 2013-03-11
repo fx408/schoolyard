@@ -1,13 +1,15 @@
 <?php
 
 /**
- * This is the model class for table "school.school_link".
+ * This is the model class for table "school_link".
  *
- * The followings are the available columns in table 'school.school_link':
+ * The followings are the available columns in table 'school_link':
  * @property integer $id
  * @property integer $school_id
  * @property string $title
  * @property string $url
+ * @property integer $create_user
+ * @property integer $create_time
  */
 class SchoolLink extends CActiveRecord
 {
@@ -25,7 +27,7 @@ class SchoolLink extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school_link';
+		return 'school_link';
 	}
 
 	/**
@@ -36,13 +38,13 @@ class SchoolLink extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('school_id, title, url', 'required'),
-			array('school_id', 'numerical', 'integerOnly'=>true),
+			array('school_id, title, url, create_time', 'required'),
+			array('school_id, create_user, create_time', 'numerical', 'integerOnly'=>true),
 			array('title', 'length', 'max'=>20),
 			array('url', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, school_id, title, url', 'safe', 'on'=>'search'),
+			array('id, school_id, title, url, create_user, create_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -67,6 +69,8 @@ class SchoolLink extends CActiveRecord
 			'school_id' => 'School',
 			'title' => 'Title',
 			'url' => 'Url',
+			'create_user' => 'Create User',
+			'create_time' => 'Create Time',
 		);
 	}
 
@@ -85,9 +89,21 @@ class SchoolLink extends CActiveRecord
 		$criteria->compare('school_id',$this->school_id);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('url',$this->url,true);
+		$criteria->compare('create_user',$this->create_user);
+		$criteria->compare('create_time',$this->create_time);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
+	}
+	
+	// 根据学校ID ，查询链接
+	public function listBySchoolId($school_id) {
+		$criteria=new CDbCriteria;
+		$criteria->compare('school_id', $school_id);
+		
+		$data = $this->findAll($criteria);
+		
+		return DataHelper::eachData($data, 'id');
 	}
 }

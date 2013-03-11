@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "school.school_correct".
+ * This is the model class for table "school_correct".
  *
- * The followings are the available columns in table 'school.school_correct':
+ * The followings are the available columns in table 'school_correct':
  * @property integer $id
  * @property integer $record_id
  * @property integer $type
@@ -29,7 +29,7 @@ class SchoolCorrect extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school_correct';
+		return 'school_correct';
 	}
 
 	/**

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "school.citys".
+ * This is the model class for table "citys".
  *
- * The followings are the available columns in table 'school.citys':
+ * The followings are the available columns in table 'citys':
  * @property integer $id
  * @property string $name
  * @property integer $parent_id
@@ -26,7 +26,7 @@ class Citys extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.citys';
+		return 'citys';
 	}
 
 	/**

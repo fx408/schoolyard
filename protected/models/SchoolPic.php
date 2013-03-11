@@ -1,9 +1,9 @@
 <?php
 
 /**
- * This is the model class for table "school.school_pic".
+ * This is the model class for table "school_pic".
  *
- * The followings are the available columns in table 'school.school_pic':
+ * The followings are the available columns in table 'school_pic':
  * @property integer $id
  * @property integer $school_id
  * @property integer $zone_id
@@ -11,6 +11,8 @@
  * @property string $name
  * @property string $thumb
  * @property string $path
+ * @property integer $create_user
+ * @property integer $create_time
  */
 class SchoolPic extends CActiveRecord
 {
@@ -28,7 +30,7 @@ class SchoolPic extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'school.school_pic';
+		return 'school_pic';
 	}
 
 	/**
@@ -39,14 +41,14 @@ class SchoolPic extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('school_id, zone_id, name, path', 'required', 'message'=>'{attribute}'),
-			array('school_id, zone_id', 'numerical', 'integerOnly'=>true),
+			array('school_id, zone_id, name, path, create_time', 'required', 'message'=>'{attribute}'),
+			array('school_id, zone_id, create_user, create_time', 'numerical', 'integerOnly'=>true),
 			array('title, name', 'length', 'max'=>20, 'tooLong'=>'图片标题不能超过20个字符!'),
 			array('thumb', 'length', 'max'=>30),
 			array('path', 'length', 'max'=>100),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('id, school_id, zone_id, title, name, thumb, path', 'safe', 'on'=>'search'),
+			array('id, school_id, zone_id, title, name, thumb, path, create_user, create_time', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -74,6 +76,8 @@ class SchoolPic extends CActiveRecord
 			'name' => 'Name',
 			'thumb' => 'Thumb',
 			'path' => 'Path',
+			'create_user' => 'Create User',
+			'create_time' => 'Create Time',
 		);
 	}
 
@@ -95,12 +99,17 @@ class SchoolPic extends CActiveRecord
 		$criteria->compare('name',$this->name,true);
 		$criteria->compare('thumb',$this->thumb,true);
 		$criteria->compare('path',$this->path,true);
+		$criteria->compare('create_user',$this->create_user);
+		$criteria->compare('create_time',$this->create_time);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
 		));
 	}
 	
+	/**
+	 * 图片列表
+	 */
 	public function getPicList() {
 		$criteria=new CDbCriteria;
 		
@@ -115,5 +124,14 @@ class SchoolPic extends CActiveRecord
 		}
 		
 		return $list;
+	}
+	
+	public function listBySchoolId($school_id) {
+		$criteria=new CDbCriteria;
+		$criteria->compare('school_id', $school_id);
+		
+		$data = $this->findAll($criteria);
+		
+		return DataHelper::eachData($data, 'id');
 	}
 }

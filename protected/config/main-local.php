@@ -16,6 +16,7 @@ return array(
 		'application.models.*',
 		'application.components.*',
 		'application.extensions.*',
+		'application.helpers.*',
 	),
 
 	'modules'=>array(
@@ -51,11 +52,12 @@ return array(
 				//'login' => 'admin/default/login',
 				//'<controller:site>/<action:\w+>' => 'site/<action>',
 				//'<controller:blog>/<id:\d+>' => '<controller>/show/id/<id>',
+				'<controller:my>/<id:\d+>(?:\.html)?' => '<controller>/detail/id/<id>',
 			),
 		),
 		// uncomment the following to use a MySQL database
 		'db'=>array(
-			'connectionString' => 'mysql:host=127.0.0.1;dbname=findlark',
+			'connectionString' => 'mysql:host=127.0.0.1;dbname=school',
 			'emulatePrepare' => true,
 			'username' => 'root',
 			'password' => 'fx1989',
